@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: envo-amp-mysql
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+    ports:
+      - "3306:3306"
+  apache:
+    build: ./builds/apache
+    container_name: envo-amp-apache
+    links:
+      - db:mysql
+    volumes:
+      - ./www:/app
+      - ./logs:/var/log/apache2
+      - ./sites-available:/etc/apache2/sites-available/
+    ports:
+        - "80:80"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: envo-amp-phpmyadmin
+    links:
+      - db:mysql
+    environment:
+      PMA_ARBITRARY: 1
+    ports:
+      - "8080:80"
+volumes:
+    db_data:

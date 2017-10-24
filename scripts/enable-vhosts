@@ -1,0 +1,2 @@
+#!/bin/bash
+docker exec -it envo-amp-apache /bin/bash -c "cd /etc/apache2/sites-available/ && a2ensite *"
